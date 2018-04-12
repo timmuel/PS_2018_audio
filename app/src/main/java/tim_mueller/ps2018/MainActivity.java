@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
     private BluetoothAdapter mBluetoothAdapter;
+    {System.out.println(mDeviceList);}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
