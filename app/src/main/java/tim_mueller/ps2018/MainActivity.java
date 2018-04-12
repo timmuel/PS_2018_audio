@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mDeviceList.add(device.getName() + "\n" + device.getAddress());
+                mDeviceList.add(device.getName() + " - " + device.getAddress());
                 Log.i("BT", device.getName() + "\n" + device.getAddress());
                 listView.setAdapter(new ArrayAdapter<String>(context,
                         android.R.layout.simple_list_item_1, mDeviceList));
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         }
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
-        System.out.println(mDeviceList);
+        System.out.println(listView);
 
     }
 
