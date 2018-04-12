@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
     private BluetoothAdapter mBluetoothAdapter;
-    {System.out.println(mDeviceList);}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
             mBluetoothAdapter.startDiscovery();
         }
         catch (Exception e) {
-            //don't do anything
+            Log.i("BT", "we fucked up!");
         }
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
+        System.out.println(mDeviceList);
 
     }
 
