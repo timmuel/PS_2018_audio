@@ -18,7 +18,20 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
-    private BluetoothAdapter mBluetoothAdapter;
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent
+                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                mDeviceList.add(device.getName() + "\n" + device.getAddress());
+                Log.i("BT", device.getName() + "\n" + device.getAddress());
+                listView.setAdapter(new ArrayAdapter<String>(context,
+                        android.R.layout.simple_list_item_1, mDeviceList));
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +40,20 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!mBluetoothAdapter.isEnabled()){
+            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBT, 0xDEADBEEF);
+
+        }
+        else Log.i("BT", "Bluetooth enabled!");
+        if (mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.cancelDiscovery();
+            Log.i("BT", "Stopped previous discoveries!");
+        }
         try {
             mBluetoothAdapter.startDiscovery();
+            Log.i("BT", "discovery started!");
         }
         catch (Exception e) {
             Log.i("BT", "we fucked up!");
@@ -47,18 +71,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent
-                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mDeviceList.add(device.getName() + "\n" + device.getAddress());
-                Log.i("BT", device.getName() + "\n" + device.getAddress());
-                listView.setAdapter(new ArrayAdapter<String>(context,
-                        android.R.layout.simple_list_item_1, mDeviceList));
-            }
-        }
-    };
 
 }
