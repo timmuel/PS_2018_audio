@@ -18,8 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
+    mReceiver mReceiveru = new mReceiver();
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private class mReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Log.i("BT", "schölölölölöl!");
@@ -57,18 +58,19 @@ public class MainActivity extends AppCompatActivity {
             Log.i("BT", "discovery started!");
         }
         catch (Exception e) {
-            Log.i("BT", "we fucked up!");
+            Log.i("BT", "couldn't start discovery!");
         }
+        mReceiver mReceiveru = new mReceiver();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(mReceiver, filter);
-        System.out.println(listView);
+        registerReceiver(mReceiveru, filter);
+        System.out.println(mDeviceList);
 
     }
 
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mReceiver);
+        unregisterReceiver(mReceiveru);
         super.onDestroy();
     }
 
