@@ -8,34 +8,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by Tim on 12/04/18.
+ */
 
-    private ListView listView;
-    private ArrayList<String> mDeviceList = new ArrayList<String>();
+public class Bluetooth_Handler {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    ArrayList<String> mDeviceList = new ArrayList<String>();
 
+    public ArrayList<String> discover(){
 
-        listView = (ListView) findViewById(R.id.listView);
+        ListView listView;
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!mBluetoothAdapter.isEnabled()){
-            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBT);
-        }
 
-        else Log.i("BT", "Bluetooth enabled!");
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
             Log.i("BT", "Stopped previous discoveries!");
@@ -56,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             Log.i("BT", "couldn't start discovery!");
         }
         System.out.println(mDeviceList);
+
+
+        return mDeviceList;
 
     }
 
@@ -78,11 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(mReceiver);
-        super.onDestroy();
     }
+
+
+
+
+
+
 
 
 }

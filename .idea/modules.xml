@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PS20182.iml" filepath="$PROJECT_DIR$/PS20182.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PS_2018_audio.iml" filepath="$PROJECT_DIR$/.idea/modules/PS_2018_audio.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" />
     </modules>
   </component>
 </project>
