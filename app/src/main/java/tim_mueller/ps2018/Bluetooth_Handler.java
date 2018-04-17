@@ -18,13 +18,12 @@ import java.util.ArrayList;
  * Created by Tim on 12/04/18.
  */
 
-public class Bluetooth_Handler {
+public class Bluetooth_Handler extends BroadcastReceiver{
 
     ArrayList<String> mDeviceList = new ArrayList<String>();
+    private BroadcastReceiver mReceiver;
 
-    public ArrayList<String> discover(){
-
-        ListView listView;
+    public ArrayList<String> discover(Context context){
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -33,13 +32,8 @@ public class Bluetooth_Handler {
             Log.i("BT", "Stopped previous discoveries!");
         }
 
-        int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.BLUETOOTH},
-                MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
-
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(mReceiver, filter);
+        context.getApplicationContext().registerReceiver(mReceiver, filter);
         try {
             mBluetoothAdapter.startDiscovery();
             Log.i("BT", "discovery started!");
@@ -49,12 +43,13 @@ public class Bluetooth_Handler {
         }
         System.out.println(mDeviceList);
 
+        context.getApplicationContext().unregisterReceiver(mReceiver);
 
         return mDeviceList;
 
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private ListView listView;
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
@@ -70,16 +65,3 @@ public class Bluetooth_Handler {
             }
         }
     };
-
-
-
-    }
-
-
-
-
-
-
-
-
-}
