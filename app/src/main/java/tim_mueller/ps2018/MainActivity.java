@@ -26,39 +26,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         listView = (ListView) findViewById(R.id.listView);
 
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!mBluetoothAdapter.isEnabled()){
-            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();        //BLUETOOTH ADAPTER INITIALISIEREN
+        if (!mBluetoothAdapter.isEnabled()){                                              //CHECK, OB BLUETOOTH AKTIVIERT IST
+            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);         //FALLS NICHT, AUFFORDERUNG ZUM AKTVIEREN
             startActivity(enableBT);
         }
 
-        else Log.i("BT", "Bluetooth enabled!");
-        if (mBluetoothAdapter.isDiscovering()) {
-            mBluetoothAdapter.cancelDiscovery();
+        else Log.i("BT", "Bluetooth enabled!");                                  //BLUETOOTH IST AKTIVIERT
+        if (mBluetoothAdapter.isDiscovering()) {                                            //CHECKT, OB EINE BLUETOOTH-SUCHE LÄUFT
+            mBluetoothAdapter.cancelDiscovery();                                            //FALLS JA, STOPPEN
             Log.i("BT", "Stopped previous discoveries!");
         }
 
-        int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;
-        ActivityCompat.requestPermissions(this,
+        int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;                                    //BLUETOOTH-BERECHTIGUNG EINHOLEN
+        ActivityCompat.requestPermissions(this,                                     //DAS PASSIERT NUR BEIM STARTUP!
                 new String[]{Manifest.permission.BLUETOOTH},
                 MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        Bluetooth_Handler help = new Bluetooth_Handler();
+        System.out.println(help.discover(this));
+
+
+        /*
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);               //MITBEKOMMEN, FALLS GERÄTE GEFUNDEN WERDEN
         registerReceiver(mReceiver, filter);
         try {
-            mBluetoothAdapter.startDiscovery();
+            mBluetoothAdapter.startDiscovery();                                             //SUCHE NACH GERÄTEN STARTEN
             Log.i("BT", "discovery started!");
         }
         catch (Exception e) {
             Log.i("BT", "couldn't start discovery!");
         }
-        System.out.println(mDeviceList);
+        */
 
     }
 
+
+/*
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -76,11 +82,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
+*/
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mReceiver);
         super.onDestroy();
     }
 
