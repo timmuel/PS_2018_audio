@@ -29,6 +29,7 @@ public class Bluetooth_Handler{
 
     public ArrayList<String> discover(Context context){
 
+        mDeviceList.clear();
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (mBluetoothAdapter.isDiscovering()) {
@@ -64,7 +65,7 @@ public class Bluetooth_Handler{
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
-                if(deviceName != null) mDeviceList.add(deviceName + " , " + deviceHardwareAddress);
+                if(deviceName != null && !mDeviceList.contains(deviceName + " , " + deviceHardwareAddress)) mDeviceList.add(deviceName + " , " + deviceHardwareAddress);
                 ArrayAdapter adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList);
                 devicelist.setAdapter(adapter);
                 if (deviceName != null) Log.i("BT", deviceName);

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SwipeRefreshLayout swiper;
     private Bluetooth_Handler Handler;
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
@@ -27,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        swiper = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Handler.discover(getApplicationContext());
+                Log.i("BT", "refreshing");
+            }
+        });
         listView = (ListView) findViewById(R.id.listView);
         Handler = new Bluetooth_Handler(listView);
 
@@ -59,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
             Handler.closereceiver(this);
             super.onDestroy();
         }
+
+
 
 
     }
