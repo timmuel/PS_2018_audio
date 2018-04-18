@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
         Bluetooth_Handler help = new Bluetooth_Handler();
-        help.discover(this);
+        System.out.println(help.discover(this));
 
 
         /*
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i("BT", "couldn't start discovery!");
         }
         */
-        System.out.println(mDeviceList);
 
     }
 
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        /*unregisterReceiver(mReceiver);*/
         super.onDestroy();
     }
 
