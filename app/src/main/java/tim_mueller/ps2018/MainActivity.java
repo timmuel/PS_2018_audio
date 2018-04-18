@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Bluetooth_Handler Handler;
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
 
@@ -27,14 +28,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listView);
+        Handler = new Bluetooth_Handler(listView);
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();        //BLUETOOTH ADAPTER INITIALISIEREN
-        if (!mBluetoothAdapter.isEnabled()){                                              //CHECK, OB BLUETOOTH AKTIVIERT IST
+        if (!mBluetoothAdapter.isEnabled()) {                                              //CHECK, OB BLUETOOTH AKTIVIERT IST
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);         //FALLS NICHT, AUFFORDERUNG ZUM AKTVIEREN
             startActivity(enableBT);
-        }
+        } else
+            Log.i("BT", "Bluetooth enabled!");                                  //BLUETOOTH IST AKTIVIERT
 
-        else Log.i("BT", "Bluetooth enabled!");                                  //BLUETOOTH IST AKTIVIERT
         if (mBluetoothAdapter.isDiscovering()) {                                            //CHECKT, OB EINE BLUETOOTH-SUCHE LÄUFT
             mBluetoothAdapter.cancelDiscovery();                                            //FALLS JA, STOPPEN
             Log.i("BT", "Stopped previous discoveries!");
@@ -42,52 +44,22 @@ public class MainActivity extends AppCompatActivity {
 
         int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;                                    //BLUETOOTH-BERECHTIGUNG EINHOLEN
         ActivityCompat.requestPermissions(this,                                     //DAS PASSIERT NUR BEIM STARTUP!
-                new String[]{Manifest.permission.BLUETOOTH},
+                new String[]{
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
-        Bluetooth_Handler help = new Bluetooth_Handler();
-        System.out.println(help.discover(this));
-
-
-        /*
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);               //MITBEKOMMEN, FALLS GERÄTE GEFUNDEN WERDEN
-        registerReceiver(mReceiver, filter);
-        try {
-            mBluetoothAdapter.startDiscovery();                                             //SUCHE NACH GERÄTEN STARTEN
-            Log.i("BT", "discovery started!");
-        }
-        catch (Exception e) {
-            Log.i("BT", "couldn't start discovery!");
-        }
-        */
+        Handler.discover(this);
 
     }
 
-
-/*
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-                if(deviceName!= null) mDeviceList.add(deviceName);
-                ArrayAdapter adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, mDeviceList);
-                listView.setAdapter(adapter);
-                if(deviceName != null) Log.i("BT", deviceName);
-            }
+        @Override
+        protected void onDestroy () {
+            Handler.closereceiver(this);
+            super.onDestroy();
         }
-    };
 
-*/
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
-
-}

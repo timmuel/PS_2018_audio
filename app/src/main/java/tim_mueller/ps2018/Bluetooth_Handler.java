@@ -1,11 +1,13 @@
 package tim_mueller.ps2018;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,10 +20,14 @@ import java.util.ArrayList;
 
 public class Bluetooth_Handler{
 
-    ArrayList<String> mDeviceList = new ArrayList<String>();
-    private ListView listView;
+    ListView devicelist;
+    public Bluetooth_Handler(ListView listView){
+        devicelist = listView;
+    }
 
-    public ArrayList<String> discover(Context context) {
+    ArrayList<String> mDeviceList = new ArrayList<String>();
+
+    public ArrayList<String> discover(Context context){
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -35,28 +41,32 @@ public class Bluetooth_Handler{
         try {
             mBluetoothAdapter.startDiscovery();
             Log.i("BT", "discovery started!");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.i("BT", "couldn't start discovery!");
         }
 
         return mDeviceList;
+    }
+
+    public void closereceiver(Context context){
+
+        context.unregisterReceiver(mReceiver);
 
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
-                Log.i("BT", "gaygaygaygaygaygay");
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
-                if (deviceName != null) mDeviceList.add(deviceName);
-                if (deviceHardwareAddress != null) mDeviceList.add(deviceHardwareAddress);
+                if(deviceName != null) mDeviceList.add(deviceName + " , " + deviceHardwareAddress);
                 ArrayAdapter adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList);
-                listView.setAdapter(adapter);
+                devicelist.setAdapter(adapter);
                 if (deviceName != null) Log.i("BT", deviceName);
             }
         }
