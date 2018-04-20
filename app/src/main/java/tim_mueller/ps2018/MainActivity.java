@@ -3,6 +3,7 @@ package tim_mueller.ps2018;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swiper;
     private Bluetooth_Handler Handler;
     private ListView listView;
+    private BluetoothManager mBluetoothManager;
+    private BluetoothAdapter mBluetoothAdapter;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
 
     @Override
@@ -37,11 +40,20 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("BT", "refreshing");
             }
         });
+        mBluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         listView = (ListView) findViewById(R.id.listView);
-        Handler = new Bluetooth_Handler(listView);
 
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();        //BLUETOOTH ADAPTER INITIALISIEREN
-        if (!mBluetoothAdapter.isEnabled()) {                                              //CHECK, OB BLUETOOTH AKTIVIERT IST
+        int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;                                    //BLUETOOTH-BERECHTIGUNG EINHOLEN
+        ActivityCompat.requestPermissions(this,                                     //DAS PASSIERT NUR BEIM STARTUP!
+                new String[]{
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
+
+        mBluetoothAdapter = mBluetoothManager.getAdapter();                     //BLUETOOTH ADAPTER INITIALISIEREN
+        Handler = new Bluetooth_Handler(listView, mBluetoothAdapter);
+        if (!mBluetoothAdapter.isEnabled()) {                                             //CHECK, OB BLUETOOTH AKTIVIERT IST
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);         //FALLS NICHT, AUFFORDERUNG ZUM AKTVIEREN
             startActivity(enableBT);
         } else
@@ -51,14 +63,6 @@ public class MainActivity extends AppCompatActivity {
             mBluetoothAdapter.cancelDiscovery();                                            //FALLS JA, STOPPEN
             Log.i("BT", "Stopped previous discoveries!");
         }
-
-        int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;                                    //BLUETOOTH-BERECHTIGUNG EINHOLEN
-        ActivityCompat.requestPermissions(this,                                     //DAS PASSIERT NUR BEIM STARTUP!
-                new String[]{
-                        Manifest.permission.BLUETOOTH,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
         Handler.discover(this);
 
