@@ -1,21 +1,27 @@
 #include <SoftwareSerial.h>
 
-// Using digital pins d2, d4 to emulate UART port
-
-SoftwareSerial dspSerial(2,4);
+SoftwareSerial mySerial(2, 4); // RX, TX
 
 void setup() {
-  Serial.begin(115200);             // Init the Bluetooth / USB serial
-  while (!Serial){ }                // Wait for Blutooth / USB serial to be rdy
-  dspSerial.begin(4800);            // Start serial to dsp with rate 4800
+  // Open serial communications and wait for port to open:
+  Serial.begin(57600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+byte a = 0x11;
+
+  Serial.println("Goodnight moon!");
+
+  // set the data rate for the SoftwareSerial port
+  mySerial.begin(4800);
+  mySerial.println("Hello, world?");
 }
 
-void loop() {
-  //Simple echo function (Read from USB, Write to uart, read from uart, write to usb)
-  if(dspSerial.available()){
-    Serial.write(Serial.read());
-  }
-  if(Serial.available()){
-    dspSerial.write(Serial.read());
+void loop() { // run over and over
+  mySerial.println("Lol");
+  delay(1000);
+  if(mySerial.available()){
+    Serial.write(mySerial.read());
   }
 }
