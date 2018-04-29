@@ -1,12 +1,15 @@
 package tim_mueller.ps2018;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Adapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,11 +17,13 @@ import java.util.List;
  */
 
 class BtleScanCallback extends ScanCallback{
-    private HashMap mScanResults;
-    private DeviceAdapter mAdapteter;
+    private ArrayList<BluetoothDevice> mDeviceList;
+    private DeviceAdapter mAdapter;
+    private Context mContext;
 
-    public BtleScanCallback(HashMap sr){
-        mScanResults = sr;
+    public BtleScanCallback(ArrayList deviceList, Context context){
+        mContext = context;
+        mDeviceList = deviceList;
     }
 
     @Override
@@ -42,15 +47,17 @@ class BtleScanCallback extends ScanCallback{
     private void addScanResult(ScanResult result) {                          // Add result to hashmap if not already contained
         BluetoothDevice device = result.getDevice();
         String deviceAddress = device.getAddress();
-        if(!mScanResults.containsKey(deviceAddress)){
-            mScanResults.put(deviceAddress, device);
+        if(!mDeviceList.contains(device)){
+            mDeviceList.add(device);
             Log.i("BTS", "Device found");
             Log.i("BTS", device.getName());
             Log.i("BTS", device.getAddress());
-            mAdapteter = new DeviceAdapter(mScanResults);
-
+            mAdapter = new DeviceAdapter(mContext,mDeviceList);
+            ListView listView = (ListView) ((Activity) mContext).findViewById(R.id.listView);
+            listView.setAdapter(mAdapter);
         }else{
-            mScanResults.replace(deviceAddress,device);
+            mDeviceList.remove(device);
+            mDeviceList.add(device);
         }
     }
 };

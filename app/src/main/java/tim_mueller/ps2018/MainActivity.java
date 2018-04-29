@@ -13,8 +13,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        listView = findViewById(R.id.listView);
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                        Log.i("CLK",Integer.toString(position));
+                    }
+                }
+        );
 
         swiper = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -38,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 Handler.discover(getApplicationContext());
                 Log.i("BT", "refreshing");
+                swiper.setRefreshing(false);
             }
         });
+
+
+
         mBluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-        listView = (ListView) findViewById(R.id.listView);
 
         int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;                                    //BLUETOOTH-BERECHTIGUNG EINHOLEN
         ActivityCompat.requestPermissions(this,                                     //DAS PASSIERT NUR BEIM STARTUP!
@@ -52,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();                     //BLUETOOTH ADAPTER INITIALISIEREN
-        Handler = new Bluetooth_Handler(listView, mBluetoothAdapter);
+        Handler = new Bluetooth_Handler(mBluetoothAdapter,this);
         if (!mBluetoothAdapter.isEnabled()) {                                             //CHECK, OB BLUETOOTH AKTIVIERT IST
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);         //FALLS NICHT, AUFFORDERUNG ZUM AKTVIEREN
             startActivity(enableBT);
@@ -70,11 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onDestroy () {
-            Handler.closereceiver(this);
             super.onDestroy();
         }
-
-
 
 
     }

@@ -25,54 +25,36 @@ import java.util.List;
 
 public class Bluetooth_Handler{
 
-    ListView deviceview;
     boolean mScanning;
     BluetoothAdapter mBluetoothAdapter;
     BluetoothLeScanner mBluetoothLeScanner;
-    public Bluetooth_Handler(ListView listView, BluetoothAdapter ba){
-        deviceview = listView;
+    Context mContext;
+
+    public Bluetooth_Handler(BluetoothAdapter ba, Context context){
         mBluetoothAdapter = ba;
+        mContext = context;
     }
 
-    ArrayList<String> mDeviceList = new ArrayList<String>();
+    ArrayList<BluetoothDevice> mDeviceList = new ArrayList<BluetoothDevice>();
 
-    public ArrayList<String> discover(Context context){
+    public void discover(Context context){
+        Log.i("BTH", "Discover started");
         mDeviceList.clear();
 
         List<ScanFilter> filters = new ArrayList<>();
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                 .build();
-        HashMap mScanResults = new HashMap<>();
-        BtleScanCallback mScanCallback = new BtleScanCallback(mScanResults);
+        BtleScanCallback mScanCallback = new BtleScanCallback(mDeviceList,mContext);
 
-        mScanCallback = new BtleScanCallback(mScanResults);
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         mBluetoothLeScanner.startScan(filters, settings, mScanCallback);
         mScanning = true;
-        return mDeviceList;
     }
 
     public void closereceiver(Context context){
 
-        context.unregisterReceiver(mReceiver);
+        //TODO: close scanner
 
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-                if(deviceName != null && !mDeviceList.contains(deviceName + " , " + deviceHardwareAddress)) mDeviceList.add(deviceName + " , " + deviceHardwareAddress);
-                ArrayAdapter adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList);
-                deviceview.setAdapter(adapter);
-                if (deviceName != null) Log.i("BT", deviceName);
-            }
-        }
-    };
 };
