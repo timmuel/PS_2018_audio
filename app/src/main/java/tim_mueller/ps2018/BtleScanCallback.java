@@ -5,6 +5,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,31 +15,42 @@ import java.util.List;
 
 class BtleScanCallback extends ScanCallback{
     private HashMap mScanResults;
+    private DeviceAdapter mAdapteter;
 
     public BtleScanCallback(HashMap sr){
         mScanResults = sr;
     }
 
     @Override
-    public void onScanResult(int callbackType, ScanResult result) {
-        addScanResult(result);
-        Log.i("BTS", "Device found");
-        Log.i("BTS", result.toString());
+    public void onScanResult(int callbackType, ScanResult result) {         // Single Scan result -> add to hashmap
+        if(result.getDevice().getName()!=null) {
+            addScanResult(result);
+        }
     }
     @Override
-    public void onBatchScanResults(List<ScanResult> results) {
-        Log.i("BTS", "Devices found");
+    public void onBatchScanResults(List<ScanResult> results) {              // Multiple Scan results -> add all to hashmap
         for (ScanResult result : results) {
-            addScanResult(result);
+            if(result.getDevice().getName()!=null) {
+                addScanResult(result);
+            }
         }
     }
     @Override
     public void onScanFailed(int errorCode) {
         Log.e("BTS", "BLE Scan Failed with code " + errorCode);
     }
-    private void addScanResult(ScanResult result) {
+    private void addScanResult(ScanResult result) {                          // Add result to hashmap if not already contained
         BluetoothDevice device = result.getDevice();
         String deviceAddress = device.getAddress();
-        mScanResults.put(deviceAddress, device);
+        if(!mScanResults.containsKey(deviceAddress)){
+            mScanResults.put(deviceAddress, device);
+            Log.i("BTS", "Device found");
+            Log.i("BTS", device.getName());
+            Log.i("BTS", device.getAddress());
+            mAdapteter = new DeviceAdapter(mScanResults);
+
+        }else{
+            mScanResults.replace(deviceAddress,device);
+        }
     }
 };
