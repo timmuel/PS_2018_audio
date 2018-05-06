@@ -35,15 +35,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.listView);
-        listView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener()
-                {
-                    @Override
-                    public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
-                        Log.i("CLK",Integer.toString(position));
-                    }
-                }
-        );
 
         swiper = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -55,16 +46,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         mBluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
 
         int MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH = 1;                                    //BLUETOOTH-BERECHTIGUNG EINHOLEN
         ActivityCompat.requestPermissions(this,                                     //DAS PASSIERT NUR BEIM STARTUP!
                 new String[]{
-                        Manifest.permission.BLUETOOTH,
+                        //Manifest.permission.BLUETOOTH,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION},
+                        //Manifest.permission.ACCESS_FINE_LOCATION
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN
+                },
                 MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();                     //BLUETOOTH ADAPTER INITIALISIEREN
@@ -81,6 +73,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Handler.discover(this);
+
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                        Log.i("CLK","Selected Item position: "+Integer.toString(position));
+                        Handler.connect(position);
+                    }
+                }
+        );
 
     }
 
