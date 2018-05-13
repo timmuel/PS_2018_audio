@@ -27,13 +27,13 @@ class BtleScanCallback extends ScanCallback{
     }
 
     @Override
-    public void onScanResult(int callbackType, ScanResult result) {         // Single Scan result -> add to hashmap
+    public void onScanResult(int callbackType, ScanResult result) {         // Single Scan result -> add to Arraylist
         if(result.getDevice().getName()!=null) {
             addScanResult(result);
         }
     }
     @Override
-    public void onBatchScanResults(List<ScanResult> results) {              // Multiple Scan results -> add all to hashmap
+    public void onBatchScanResults(List<ScanResult> results) {              // Multiple Scan results -> add all to Arraylist
         for (ScanResult result : results) {
             if(result.getDevice().getName()!=null) {
                 addScanResult(result);
@@ -44,18 +44,17 @@ class BtleScanCallback extends ScanCallback{
     public void onScanFailed(int errorCode) {
         Log.e("BTS", "BLE Scan Failed with code " + errorCode);
     }
-    private void addScanResult(ScanResult result) {                          // Add result to hashmap if not already contained
+    private void addScanResult(ScanResult result) {                          // Add result to Arraylist if not already contained
         BluetoothDevice device = result.getDevice();
-        String deviceAddress = device.getAddress();
         if(!mDeviceList.contains(device)){
             mDeviceList.add(device);
             Log.i("BTS", "Device found");
             Log.i("BTS", device.getName());
             Log.i("BTS", device.getAddress());
-            mAdapter = new DeviceAdapter(mContext,mDeviceList);
+            mAdapter = new DeviceAdapter(mContext,mDeviceList);               // Set textview
             ListView listView = (ListView) ((Activity) mContext).findViewById(R.id.listView);
             listView.setAdapter(mAdapter);
-        }else{
+        }else{                                                                // If already contained update
             mDeviceList.remove(device);
             mDeviceList.add(device);
         }

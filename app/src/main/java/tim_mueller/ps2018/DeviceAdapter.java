@@ -25,10 +25,10 @@ public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater mInfalater = LayoutInflater.from(getContext());
-        View listElement = mInfalater.inflate(R.layout.listitem, parent,false);
+        View listElement = mInfalater.inflate(R.layout.listitem, parent,false);                     // New entry in list
 
-        BluetoothDevice singleItem = getItem(position);
-        TextView name = (TextView) listElement.findViewById(R.id.textViewName);
+        BluetoothDevice singleItem = getItem(position);                                                         // item at position in arraylist
+        TextView name = (TextView) listElement.findViewById(R.id.textViewName);                                 // Set name and address in textviews
         TextView addr = (TextView) listElement.findViewById(R.id.textViewAddr);
 
         name.setText(singleItem.getName());

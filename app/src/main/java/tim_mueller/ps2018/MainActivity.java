@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         volumeBar = findViewById(R.id.volume_bar);
 
-        swiper = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swiper = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);                     // Refresh scan on pulldown
         swiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -70,20 +70,22 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothAdapter = mBluetoothManager.getAdapter();                               //BLUETOOTH ADAPTER INITIALISIEREN
         Handler = new Bluetooth_Handler(mBluetoothAdapter,this);
         dspCom = new DspCom(getApplicationContext(),Handler);
+        Handler.setDsp(dspCom);                                                           // Set DspCom of handler
+
         if (!mBluetoothAdapter.isEnabled()) {                                             //CHECK, OB BLUETOOTH AKTIVIERT IST
             Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);         //FALLS NICHT, AUFFORDERUNG ZUM AKTVIEREN
             startActivity(enableBT);
         } else
             Log.i("BT", "Bluetooth enabled!");                                  //BLUETOOTH IST AKTIVIERT
 
-        if (mBluetoothAdapter.isDiscovering()) {                                            //CHECKT, OB EINE BLUETOOTH-SUCHE LÄUFT
-            mBluetoothAdapter.cancelDiscovery();                                            //FALLS JA, STOPPEN
+        if (mBluetoothAdapter.isDiscovering()) {                                           //CHECKT, OB EINE BLUETOOTH-SUCHE LÄUFT
+            mBluetoothAdapter.cancelDiscovery();                                           //FALLS JA, STOPPEN
             Log.i("BT", "Stopped previous discoveries!");
         }
 
-        Handler.discover();
+        Handler.discover();                                                                // start Scan for devices
 
-        listView.setOnItemClickListener(
+        listView.setOnItemClickListener(                                                   // List view connect to device if clicked
                 new AdapterView.OnItemClickListener()
                 {
                     @Override
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {                    // Send new Volume to dsd
             boolean refreshTimeout = false;
             Timer timer = new Timer();
              @Override
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
              public void onStopTrackingTouch(SeekBar seekBar) {
-                 dspCom.setVolume(((float)seekBar.getProgress())/100.0f);        // Send if finger lifted
+                 dspCom.setVolume(((float)seekBar.getProgress())/100.0f);                                   // Send if finger lifted
              }
          }
         );
