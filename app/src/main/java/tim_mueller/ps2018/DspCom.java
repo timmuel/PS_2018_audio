@@ -17,16 +17,19 @@ public class DspCom {
     private Context mContext;
     private int nrRecieved = 0;
     private byte[] dataReceived = new byte[3];
+    Toast TOAST_VOLUME;
+    Toast TOAST_INPUT;
 
-    CharSequence TOAST_VOLUMEE = "VOLUME muss zwischen 0 und 1 sein!";
-    int duration = Toast.LENGTH_SHORT;
-    Toast TOAST_VOLUME = Toast.makeText(mContext, TOAST_VOLUMEE, duration);
-    CharSequence TOAST_INPUTT = "Input muss zwischen 1 und 6 sein!";
-    Toast TOAST_INPUT = Toast.makeText(mContext, TOAST_INPUTT, duration);
 
     public DspCom(Context context, Bluetooth_Handler bluetooth_handler){
         mBluetoothHandler = bluetooth_handler;
         mContext = context;
+
+        CharSequence TOAST_VOLUMEE = "VOLUME muss zwischen 0 und 1 sein!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast TOAST_VOLUME = Toast.makeText(mContext, TOAST_VOLUMEE, duration);
+        CharSequence TOAST_INPUTT = "Input muss zwischen 1 und 6 sein!";
+        Toast TOAST_INPUT = Toast.makeText(mContext, TOAST_INPUTT, duration);
     }
 
     public void setVolume(float volume){                // Volume in percent
@@ -37,8 +40,11 @@ public class DspCom {
             msg[2] = (byte) (volume * 255);                   // Volume in byte precision
             if (!testConnected()) return;
             mBluetoothHandler.sendMessage(msg);
+        }/* else
+        {
+            TOAST_INPUT.show();
         }
-        else TOAST_VOLUME.show();
+        */
     }
 
     private boolean testConnected(){                       // Call before sending
@@ -48,16 +54,19 @@ public class DspCom {
         return connected;
     }
 
-    public void setInput(int input){
-        if(input > 0 && input < 7) {
+    public void setInput(int input) {
+        if (input > 0 && input < 7) {
             byte[] msg = new byte[3];
             msg[0] = STARTING_BYTE;
             msg[1] = SET_INPUT;
             msg[2] = (byte) input;                   // Selected input
             if (!testConnected()) return;
             mBluetoothHandler.sendMessage(msg);
+        }/* else
+        {
+            TOAST_INPUT.show();
         }
-        else TOAST_INPUT.show();
+        */
     }
 
     public void addReceived(byte recv){

@@ -8,11 +8,11 @@
         android:id="@+id/textViewName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/textview" />
 
     <TextView
         android:id="@+id/textViewAddr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/textview" />
 </LinearLayout>
