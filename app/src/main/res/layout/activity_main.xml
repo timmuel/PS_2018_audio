@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input" />
+        app:layout_constraintTop_toBottomOf="@+id/input"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ToggleButton
         android:id="@+id/toggleButton"
@@ -92,7 +93,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <Spinner
-        android:id="@+id/input"
+        android:id="@+id/output"
         android:layout_width="174dp"
         android:layout_height="19dp"
         android:layout_marginBottom="20dp"
@@ -102,17 +103,17 @@
         app:layout_constraintBottom_toTopOf="@+id/volume_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/output" />
+        app:layout_constraintTop_toBottomOf="@+id/input" />
 
     <Spinner
-        android:id="@+id/output"
+        android:id="@+id/input"
         android:layout_width="174dp"
         android:layout_height="19dp"
         android:layout_marginBottom="25dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="61dp"
         android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/input"
+        app:layout_constraintBottom_toTopOf="@+id/output"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/toggleButton" />

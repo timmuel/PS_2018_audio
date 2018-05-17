@@ -33,7 +33,9 @@ public class DspCom {
     }
 
     public void setVolume(float volume){                // Volume in percent
-        if(volume >= 0 && volume <= 1) {
+        if(volume >= 0 && volume <= 7) {
+            Toast.makeText(mContext,"ich tuen2",Toast.LENGTH_SHORT).show();
+
             byte[] msg = new byte[3];
             msg[0] = STARTING_BYTE;
             msg[1] = SET_VOLUME;
@@ -56,6 +58,7 @@ public class DspCom {
 
     public void setInput(int input) {
         if (input > 0 && input < 7) {
+            Toast.makeText(mContext,"ich tuen1",Toast.LENGTH_SHORT).show();
             byte[] msg = new byte[3];
             msg[0] = STARTING_BYTE;
             msg[1] = SET_INPUT;

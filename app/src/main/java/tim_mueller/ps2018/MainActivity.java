@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-                        Log.i("CLK", "Selected Item position: " + Integer.toString(position));
-                        dspCom.setInput(position);
+                        Log.i("CLK", "Selected Item position: " + Integer.toString(position+1));
+                        dspCom.setInput(position+1);
                     }
 
                     @Override
@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-                        Log.i("CLK", "Selected Item position: " + Integer.toString(position));
-                        dspCom.setVolume(position);
+                        Log.i("CLK", "Selected Item position: " + Integer.toString(position+1));
+                        dspCom.setVolume(position+1);
                     }
 
                     @Override
