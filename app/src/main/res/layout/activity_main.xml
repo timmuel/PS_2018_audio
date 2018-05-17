@@ -11,40 +11,36 @@
         android:layout_width="297dp"
         android:layout_height="32dp"
         android:layout_marginBottom="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/output" />
 
     <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginStart="148dp"
         android:text="@string/togglebutton"
         android:textOff="play"
         android:textOn="stop"
-        app:layout_constraintBottom_toTopOf="@+id/output"
+        app:layout_constraintBottom_toTopOf="@+id/input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swiperefresh" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="366dp"
         android:layout_height="27dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="17dp"
         android:text="connected to:"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,27 +51,25 @@
         android:id="@+id/textView2"
         android:layout_width="366dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="6dp"
         android:text="status:"
         app:layout_constraintBottom_toTopOf="@+id/swiperefresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh"
         android:layout_width="294dp"
         android:layout_height="195dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <ListView
@@ -86,9 +80,10 @@
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/toggleButton"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.716"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:layout_editor_absoluteY="105dp" />
+            app:layout_constraintVertical_bias="1.0" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -96,54 +91,42 @@
         android:id="@+id/output"
         android:layout_width="174dp"
         android:layout_height="19dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/volume_bar"
+        android:layout_marginStart="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/input" />
+        tools:layout_editor_absoluteY="403dp" />
 
     <Spinner
         android:id="@+id/input"
         android:layout_width="174dp"
         android:layout_height="19dp"
-        android:layout_marginBottom="25dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/output"
+        android:layout_marginStart="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+        tools:layout_editor_absoluteY="352dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="80dp"
         android:layout_height="19dp"
-        android:layout_marginBottom="25dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="18dp"
         android:text="input:"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
-        app:layout_constraintEnd_toStartOf="@+id/output"
+        app:layout_constraintEnd_toStartOf="@+id/input"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+        tools:layout_editor_absoluteY="351dp" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="80dp"
         android:layout_height="19dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="25dp"
         android:text="output:"
-        app:layout_constraintBottom_toTopOf="@+id/volume_bar"
-        app:layout_constraintEnd_toStartOf="@+id/input"
+        app:layout_constraintEnd_toStartOf="@+id/output"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        tools:layout_editor_absoluteY="403dp" />
 
 </android.support.constraint.ConstraintLayout>
