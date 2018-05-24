@@ -28,6 +28,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -109,7 +111,8 @@ public class Bluetooth_Handler{
             super.onCharacteristicChanged(gatt, characteristic);
             byte[] rec = characteristic.getValue();
             for(int i=0;i<rec.length;i++){                                                                       // Add all received bytes to com
-                Log.i("BT","message recieved Byte" + i +": "+ (long)rec[i]);
+                Log.i("BT","message recieved Byte" + i +": "+ (int)rec[i]);
+                mDspCom.addReceived(rec[i]);
             }
         }
 
@@ -145,11 +148,13 @@ public class Bluetooth_Handler{
         Log.i("BT", "message sent"+success);
     }
 
+
+
     public boolean isConnected(){                                                                                 // Return connection state
         return mConnected;
     }
 
-    public void closereceiver(Context context){
+    public void closereceiver(){
 
         //TODO: close scanner
 

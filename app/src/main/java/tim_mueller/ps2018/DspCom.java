@@ -1,18 +1,22 @@
 package tim_mueller.ps2018;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 public class DspCom {
     // Communication protocol variables
-    private static final byte STARTING_BYTE = (byte)0xff;
+    public static final byte STARTING_BYTE = (byte)0xff;
 
-    private static final byte SET_VOLUME = 0x01;
-    private static final byte SET_INPUT = 0x02;
+    public static final byte SET_VOLUME = 0x01;
+    public static final byte SET_INPUT = 0x02;
+    public static final byte SET_OUTPUT = 0x03;
 
-    private static final int HEADER_SIZE = 2;
-    private static final int MESSAGE_SIZE = 3;
+    public static final int HEADER_SIZE = 2;
+    public static final int MESSAGE_SIZE = 3;
 
+
+    private int nrResync = 0;
     private Bluetooth_Handler mBluetoothHandler;
     private Context mContext;
     private int nrRecieved = 0;
@@ -21,32 +25,30 @@ public class DspCom {
     Toast TOAST_INPUT;
 
 
+
     public DspCom(Context context, Bluetooth_Handler bluetooth_handler){
         mBluetoothHandler = bluetooth_handler;
         mContext = context;
 
         CharSequence TOAST_VOLUMEE = "VOLUME muss zwischen 0 und 1 sein!";
         int duration = Toast.LENGTH_SHORT;
-        Toast TOAST_VOLUME = Toast.makeText(mContext, TOAST_VOLUMEE, duration);
+        TOAST_VOLUME = Toast.makeText(mContext, TOAST_VOLUMEE, duration);
         CharSequence TOAST_INPUTT = "Input muss zwischen 1 und 6 sein!";
-        Toast TOAST_INPUT = Toast.makeText(mContext, TOAST_INPUTT, duration);
+        TOAST_INPUT = Toast.makeText(mContext, TOAST_INPUTT, duration);
     }
 
     public void setVolume(float volume){                // Volume in percent
-        if(volume >= 0 && volume <= 7) {
-            Toast.makeText(mContext,"ich tuen2",Toast.LENGTH_SHORT).show();
-
+        if(volume >= 0 && volume <= 1) {
             byte[] msg = new byte[3];
             msg[0] = STARTING_BYTE;
             msg[1] = SET_VOLUME;
             msg[2] = (byte) (volume * 255);                   // Volume in byte precision
             if (!testConnected()) return;
             mBluetoothHandler.sendMessage(msg);
-        }/* else
+        }else
         {
             TOAST_INPUT.show();
         }
-        */
     }
 
     private boolean testConnected(){                       // Call before sending
@@ -57,29 +59,55 @@ public class DspCom {
     }
 
     public void setInput(int input) {
-        if (input > 0 && input < 7) {
-            Toast.makeText(mContext,"ich tuen1",Toast.LENGTH_SHORT).show();
+        if (input >= 0 && input < 7) {
             byte[] msg = new byte[3];
             msg[0] = STARTING_BYTE;
             msg[1] = SET_INPUT;
             msg[2] = (byte) input;                   // Selected input
             if (!testConnected()) return;
             mBluetoothHandler.sendMessage(msg);
-        }/* else
+        } else
         {
             TOAST_INPUT.show();
         }
-        */
+    }
+
+    public void setOutput(int output) {
+        if (output >= 0 && output < 7) {
+            byte[] msg = new byte[3];
+            msg[0] = STARTING_BYTE;
+            msg[1] = SET_OUTPUT;
+            msg[2] = (byte) output;                   // Selected output
+            if (!testConnected()) return;
+            mBluetoothHandler.sendMessage(msg);
+        } else
+        {
+            TOAST_INPUT.show();
+        }
     }
 
     public void addReceived(byte recv){
-        if(nrRecieved == 0 && recv != STARTING_BYTE) return;                                             // Message must start with 0xff
+        if(nrRecieved == 0 && recv!=0xff ){
+            Log.i("BT","not in sync!!");
+        }
         dataReceived[nrRecieved] = recv;
         nrRecieved++;
-        if(nrRecieved == MESSAGE_SIZE) handleReceived();
+        if(nrRecieved == MESSAGE_SIZE){
+            nrRecieved = 0;
+            handleReceived();
+        }
     }
 
     private void handleReceived(){
-        if(dataReceived[0] != STARTING_BYTE) return;                                                    // Invalid format
+        if(dataReceived[0] != STARTING_BYTE) return;                                                    // Invalid format -> get back in sync
+        if(dataReceived[1] == SET_VOLUME){
+            Log.i("BT", "Volume set to "+ dataReceived[2]);
+        }
+        if(dataReceived[1] == SET_INPUT){
+            Log.i("BT", "Input set to "+ dataReceived[2]);
+        }
+        if(dataReceived[1] == SET_OUTPUT){
+            Log.i("BT", "Output set to "+ dataReceived[2]);
+        }
     }
 }

@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.BLUETOOTH,
-                        Manifest.permission.BLUETOOTH_ADMIN
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.BLUETOOTH_PRIVILEGED
                 },
                 MY_PERMISSIONS_REQUEST_ACCESS_BLUETOOTH);
 
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
                         Log.i("CLK", "Selected Item position: " + Integer.toString(position+1));
-                        dspCom.setInput(position+1);
+                        dspCom.setInput(position);
                     }
 
                     @Override
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
                         Log.i("CLK", "Selected Item position: " + Integer.toString(position+1));
-                        dspCom.setVolume(position+1);
+                        dspCom.setOutput(position);
                     }
 
                     @Override
@@ -141,37 +142,34 @@ public class MainActivity extends AppCompatActivity {
 
 
         volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {                    // Send new Volume to dsd
-                                                 boolean refreshTimeout = false;
-                                                 Timer timer = new Timer();
+             boolean refreshTimeout = false;
+             Timer timer = new Timer();
 
-                                                 @Override
-                                                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                                     if (!refreshTimeout) {                                                                  // Send at most 10 times per second
-                                                         refreshTimeout = true;
-                                                         timer.schedule(new TimerTask() {
-                                                             @Override
-                                                             public void run() {
-                                                                 refreshTimeout = false;
-                                                             }
-                                                         }, 100);
-                                                         dspCom.setVolume(((float) progress) / 100.0f);
-                                                     }
-                                                 }
+             @Override
+             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                 if (!refreshTimeout) {                                                                  // Send at most 10 times per second
+                     refreshTimeout = true;
+                     timer.schedule(new TimerTask() {
+                         @Override
+                         public void run() {
+                             refreshTimeout = false;
+                         }
+                     }, 100);
+                     dspCom.setVolume(((float) progress) / 100.0f);
+                 }
+             }
 
-                                                 @Override
-                                                 public void onStartTrackingTouch(SeekBar seekBar) {
+             @Override
+             public void onStartTrackingTouch(SeekBar seekBar) {
 
-                                                 }
+             }
 
-                                                 @Override
-                                                 public void onStopTrackingTouch(SeekBar seekBar) {
-                                                     dspCom.setVolume(((float) seekBar.getProgress()) / 100.0f);                                   // Send if finger lifted
-                                                 }
-                                             }
+             @Override
+             public void onStopTrackingTouch(SeekBar seekBar) {
+                 dspCom.setVolume(((float) seekBar.getProgress()) / 100.0f);                                   // Send if finger lifted
+             }
+         }
         );
-
-
-
     }
 
     @Override
