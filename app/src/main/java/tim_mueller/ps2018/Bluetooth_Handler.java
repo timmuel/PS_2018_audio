@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Tim on 12/04/18.
@@ -103,7 +104,23 @@ public class Bluetooth_Handler{
             BluetoothGattService service = gatt.getService(SERIAL_SERV);                                        // Get the service to communicate with bluno
             BluetoothGattCharacteristic characteristic = service.getCharacteristic(SERIAL_CHAR);
             characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            mInitialized = gatt.setCharacteristicNotification(characteristic, true);                     // Subscribe to messages incoming from bluno
+            mInitialized = gatt.setCharacteristicNotification(characteristic, true);                    // Subscribe to messages incoming from bluno
+            if(mInitialized) {
+                mDspCom.getInput();
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mDspCom.getOutput();
+                    }
+                }, 100);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mDspCom.getVolume();
+                    }
+                }, 200);
+            }
         }
 
         @Override
@@ -159,4 +176,7 @@ public class Bluetooth_Handler{
         //TODO: close scanner
 
     }
+
+
+
 };

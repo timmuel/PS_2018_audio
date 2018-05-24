@@ -1,4 +1,5 @@
 <resources>
+    <color name="background">#aab1b5</color>
     <string name="app_name">P&amp;S 2018</string>
     <string name="togglebutton" />
     <string name="play" />
@@ -7,11 +8,13 @@
     <string name="status_not_connected" />
     <string name="textview" />
 <string-array name="inputs">
-    <item>1</item>
-    <item>2</item>
-    <item>3</item>
-    <item>4</item>
-    <item>5</item>
-    <item>6</item>
+    <item>channel 1</item>
+    <item>channel 2</item>
+    <item>channel 3</item>
+    <item>channel 4</item>
 </string-array>
+    <string-array name="outputs">
+        <item>channel 1</item>
+        <item>channel 2</item>
+    </string-array>
 </resources>

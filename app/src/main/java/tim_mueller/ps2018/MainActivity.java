@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         inputview.setAdapter(adapter1);
         Spinner outputview = (Spinner) findViewById(R.id.output);
-        ArrayAdapter adapter2 = ArrayAdapter.createFromResource(this, R.array.inputs, android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter2 = ArrayAdapter.createFromResource(this, R.array.outputs, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         outputview.setAdapter(adapter2);
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();                               //BLUETOOTH ADAPTER INITIALISIEREN
         Handler = new Bluetooth_Handler(mBluetoothAdapter, this);
-        dspCom = new DspCom(getApplicationContext(), Handler);
+        dspCom = new DspCom(this, Handler);
         Handler.setDsp(dspCom);                                                           // Set DspCom of handler
 
         if (!mBluetoothAdapter.isEnabled()) {                                             //CHECK, OB BLUETOOTH AKTIVIERT IST
