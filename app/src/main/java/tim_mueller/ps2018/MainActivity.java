@@ -174,8 +174,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Handler.closereceiver();
         super.onDestroy();
     }
+
 
 
 }

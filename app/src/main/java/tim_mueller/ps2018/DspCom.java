@@ -64,7 +64,8 @@ public class DspCom {
             byte[] msg = new byte[3];
             msg[0] = STARTING_BYTE;
             msg[1] = SET_VOLUME;
-            msg[2] = (byte) (volume * 255);                   // Volume in byte precision
+            msg[2] = (byte) (255 * Math.pow(10,volume)/10);                   // Volume in byte precision
+            Log.i("FAG",Float.toString(volume));
             if (!testConnected()) return;
             mBluetoothHandler.sendMessage(msg);
         }else
@@ -149,13 +150,12 @@ public class DspCom {
     }
 
     private void handleReceived(){
-        Log.i("BT", "LAAAADIDAAA UUUUIIII");
         if(dataReceived[0] != STARTING_BYTE) return;                                                    // Invalid format -> get back in sync
         if(dataReceived[1] == SET_VOLUME){
             ((Activity)mContext).runOnUiThread(new Runnable() {                                                  //Run text update on ui thread
                 @Override
                 public void run() {
-                    volumejetzt.setText(Integer.toString(Byte.toUnsignedInt(dataReceived[2])*100/255));
+                    volumejetzt.setText(Integer.toString((int) (100 * Math.log10((float)Byte.toUnsignedLong(dataReceived[2])/255 * 10))));
                 }
             });
         }
@@ -182,7 +182,7 @@ public class DspCom {
             ((Activity)mContext).runOnUiThread(new Runnable() {                                                  //Run text update on ui thread
                 @Override
                 public void run() {
-                    volumejetzt.setText(Integer.toString(Byte.toUnsignedInt(dataReceived[2])*100/255));
+                    volumejetzt.setText(Integer.toString((int) (100 * Math.log10((float)Byte.toUnsignedLong(dataReceived[2])/255 * 10))));
                 }
             });
 

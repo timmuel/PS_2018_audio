@@ -173,7 +173,7 @@ public class Bluetooth_Handler{
 
     public void closereceiver(){
 
-        //TODO: close scanner
+        mBluetoothAdapter.stopLeScan((BluetoothAdapter.LeScanCallback) mGattCallback);
 
     }
 

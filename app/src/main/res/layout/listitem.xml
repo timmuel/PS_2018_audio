@@ -6,13 +6,17 @@
 
     <TextView
         android:id="@+id/textViewName"
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:text="@string/textview" />
+        android:text="@string/textview"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewAddr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/textview" />
+        android:text="@string/textview"
+        android:textColor="@android:color/black"
+        android:textStyle="italic" />
 </LinearLayout>
